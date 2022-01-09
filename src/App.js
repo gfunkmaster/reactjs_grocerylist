@@ -20,6 +20,19 @@ const  handleSubmit = (e) => {
  } 
  else if (name && isEditing){
 // deal with edit
+//set list will have new value and we will map through it
+  setList(list.map((item) => {
+    if(item.id === editID){
+      //retrun all propertys, change title till whaever state name is
+      return {...item,title: name}
+    }
+    return item
+  }))
+  //reinistate all defualt values
+  setName('');
+  setEditID(null);
+  setIsEditing(false);
+  showAlert(true,'success', 'value changed')
  }
  else {
   //  show alert, showwing successfull message when we add item
@@ -47,6 +60,14 @@ const removeItem = (id) => {
   setList((list.filter((item) => item.id !== id)))
 }
 
+const editItem = (id) => {
+  /*  if id match we want to return it and edit it */
+  const specificItem = list.find((item) => item.id === id);
+  setIsEditing(true);
+  setEditID(id);
+  setName(specificItem.title)
+}
+
   return(
      <>
       <section className="section-center">
@@ -70,14 +91,14 @@ const removeItem = (id) => {
         {/* if we have sometgin in list array then we show */}
         {list.length > 0 && (
            <div className="grocery-container">
-           <List items={list} removeItem={removeItem} />
+           <List items={list} removeItem={removeItem} editItem={editItem}  />
            <button className="clear-btn" type='submit' onClick={clearList}>Clear</button>
          </div>
 
         )}
        
       </section>
-     </>)
+     </>) 
 }
 
 export default App
